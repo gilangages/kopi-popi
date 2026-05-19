@@ -1,0 +1,135 @@
+{
+  "categories": {
+    "get": {
+      "summary": "Get Categories",
+      "tags": ["Categories"],
+      "security": [],
+      "responses": {
+        "200": { "$ref": "../responses/common.json#/GenericSuccess" }
+      }
+    }
+  },
+  "products": {
+    "get": {
+      "summary": "Get All Products",
+      "tags": ["Products"],
+      "security": [],
+      "parameters": [
+        { "name": "search", "in": "query", "schema": { "type": "string" }, "example": "kopi" },
+        { "name": "category_id", "in": "query", "schema": { "type": "integer" }, "example": 1 },
+        { "name": "page", "in": "query", "schema": { "type": "integer" }, "example": 1 },
+        { "name": "limit", "in": "query", "schema": { "type": "integer" }, "example": 10 }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "type": "array",
+                    "items": { "$ref": "../schemas/common.json#/Product" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "post": {
+      "summary": "Create Product (Admin/Manager)",
+      "tags": ["Products"],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "category_id": { "type": "integer", "example": 1 },
+                "name": { "type": "string", "example": "Kopi Latte" },
+                "description": { "type": "string", "example": "Enak" },
+                "price": { "type": "number", "example": 25000 }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": { "$ref": "../responses/common.json#/GenericSuccess" }
+      }
+    }
+  },
+  "product-detail": {
+    "get": {
+      "summary": "Get Product Detail",
+      "tags": ["Products"],
+      "security": [],
+      "parameters": [
+        { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+      ],
+      "responses": {
+        "200": { "$ref": "../responses/common.json#/GenericSuccess" }
+      }
+    },
+    "patch": {
+      "summary": "Update Product",
+      "tags": ["Products"],
+      "parameters": [
+        { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+      ],
+      "responses": {
+        "200": { "$ref": "../responses/common.json#/GenericSuccess" }
+      }
+    },
+    "delete": {
+      "summary": "Delete Product",
+      "tags": ["Products"],
+      "parameters": [
+        { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+      ],
+      "responses": {
+        "200": { "$ref": "../responses/common.json#/GenericSuccess" }
+      }
+    }
+  },
+  "product-boms": {
+    "get": {
+      "summary": "Get Product BOMs",
+      "tags": ["Product BOMs"],
+      "parameters": [
+        { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+      ],
+      "responses": {
+        "200": { "$ref": "../responses/common.json#/GenericSuccess" }
+      }
+    },
+    "post": {
+      "summary": "Create Product BOM",
+      "tags": ["Product BOMs"],
+      "parameters": [
+        { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "material_id": { "type": "integer", "example": 1 },
+                "quantity_needed": { "type": "number", "example": 20 }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": { "$ref": "../responses/common.json#/GenericSuccess" }
+      }
+    }
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Multi Outlet POS & Inventory API",
+    "version": "1.0.0",
+    "description": "API Specification for Multi Outlet POS & Inventory System."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Local Development Server"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ],
+  "paths": {
+    "/auth/register": { "$ref": "./paths/auth.json#/register" },
+    "/auth/login": { "$ref": "./paths/auth.json#/login" },
+    "/auth/logout": { "$ref": "./paths/auth.json#/logout" },
+    "/auth/forgot-password": { "$ref": "./paths/auth.json#/forgot-password" },
+    "/auth/reset-password": { "$ref": "./paths/auth.json#/reset-password" },
+    
+    "/me": { "$ref": "./paths/users.json#/me" },
+    "/me/password": { "$ref": "./paths/users.json#/me-password" },
+    "/me/profile-picture": { "$ref": "./paths/users.json#/me-profile-picture" },
+    "/users": { "$ref": "./paths/users.json#/users" },
+    "/users/{id}": { "$ref": "./paths/users.json#/user-detail" },
+    "/users/{id}/disable": { "$ref": "./paths/users.json#/user-disable" },
+    
+    "/branches": { "$ref": "./paths/branches.json#/branches" },
+    
+    "/categories": { "$ref": "./paths/catalog.json#/categories" },
+    "/products": { "$ref": "./paths/catalog.json#/products" },
+    "/products/{id}": { "$ref": "./paths/catalog.json#/product-detail" },
+    "/products/{id}/boms": { "$ref": "./paths/catalog.json#/product-boms" },
+    
+    "/materials": { "$ref": "./paths/inventory.json#/materials" },
+    "/materials/{id}": { "$ref": "./paths/inventory.json#/material-detail" },
+    "/inventories": { "$ref": "./paths/inventory.json#/inventories" },
+    "/inventory-movements": { "$ref": "./paths/inventory.json#/inventory-movements" },
+    "/restock-requests": { "$ref": "./paths/inventory.json#/restock-requests" },
+    "/restock-requests/{id}/approve": { "$ref": "./paths/inventory.json#/restock-approve" },
+    "/restock-requests/{id}/reject": { "$ref": "./paths/inventory.json#/restock-reject" },
+    
+    "/carts": { "$ref": "./paths/sales.json#/carts" },
+    "/carts/items": { "$ref": "./paths/sales.json#/cart-items" },
+    "/carts/items/{id}": { "$ref": "./paths/sales.json#/cart-item-detail" },
+    "/transactions": { "$ref": "./paths/sales.json#/transactions" },
+    "/transactions/me": { "$ref": "./paths/sales.json#/transactions-me" },
+    "/transactions/{id}": { "$ref": "./paths/sales.json#/transaction-detail" },
+    "/transactions/{id}/status": { "$ref": "./paths/sales.json#/transaction-status" },
+    
+    "/shifts/open": { "$ref": "./paths/shifts.json#/open" },
+    "/shifts/{id}/close": { "$ref": "./paths/shifts.json#/close" },
+    "/shifts/{id}/verify": { "$ref": "./paths/shifts.json#/verify" },
+    
+    "/notifications": { "$ref": "./paths/notifications.json#/notifications" },
+    "/notifications/{id}/read": { "$ref": "./paths/notifications.json#/read" }
+  }
+}

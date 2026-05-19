@@ -1,0 +1,27 @@
+{
+  "branches": {
+    "get": {
+      "summary": "Get All Branches",
+      "tags": ["Branches"],
+      "security": [],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "type": "array",
+                    "items": { "$ref": "../schemas/common.json#/Branch" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

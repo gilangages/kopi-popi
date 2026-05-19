@@ -1,0 +1,129 @@
+{
+  "carts": {
+    "get": {
+      "summary": "Get My Cart",
+      "tags": ["Carts"],
+      "parameters": [{ "name": "branch_id", "in": "query", "schema": { "type": "integer" }, "example": 1 }],
+      "responses": { "200": { "$ref": "../responses/common.json#/GenericSuccess" } }
+    }
+  },
+  "cart-items": {
+    "post": {
+      "summary": "Add Item To Cart",
+      "tags": ["Carts"],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "branch_id": { "type": "integer", "example": 1 },
+                "product_id": { "type": "integer", "example": 2 },
+                "quantity": { "type": "integer", "example": 3 },
+                "notes": { "type": "string", "example": "Less sugar" }
+              }
+            }
+          }
+        }
+      },
+      "responses": { "200": { "$ref": "../responses/common.json#/GenericSuccess" } }
+    }
+  },
+  "cart-item-detail": {
+    "patch": {
+      "summary": "Update Cart Item",
+      "tags": ["Carts"],
+      "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "quantity": { "type": "integer", "example": 5 },
+                "notes": { "type": "string", "example": "Extra ice" }
+              }
+            }
+          }
+        }
+      },
+      "responses": { "200": { "$ref": "../responses/common.json#/GenericSuccess" } }
+    },
+    "delete": {
+      "summary": "Delete Cart Item",
+      "tags": ["Carts"],
+      "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+      "responses": { "200": { "$ref": "../responses/common.json#/GenericSuccess" } }
+    }
+  },
+  "transactions": {
+    "post": {
+      "summary": "Checkout Transaction",
+      "tags": ["Transactions"],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "branch_id": { "type": "integer", "example": 1 },
+                "order_type": { "type": "string", "example": "Online_Pickup" },
+                "payment_method": { "type": "string", "example": "QRIS" }
+              }
+            }
+          }
+        }
+      },
+      "responses": { "200": { "$ref": "../responses/common.json#/GenericSuccess" } }
+    },
+    "get": {
+      "summary": "Get All Transactions",
+      "tags": ["Transactions"],
+      "parameters": [
+        { "name": "branch_id", "in": "query", "schema": { "type": "integer" }, "example": 1 },
+        { "name": "status", "in": "query", "schema": { "type": "string" }, "example": "Paid" },
+        { "name": "page", "in": "query", "schema": { "type": "integer" }, "example": 1 }
+      ],
+      "responses": { "200": { "$ref": "../responses/common.json#/GenericSuccess" } }
+    }
+  },
+  "transactions-me": {
+    "get": {
+      "summary": "Get My Transactions",
+      "tags": ["Transactions"],
+      "responses": { "200": { "$ref": "../responses/common.json#/GenericSuccess" } }
+    }
+  },
+  "transaction-detail": {
+    "get": {
+      "summary": "Get Transaction Detail",
+      "tags": ["Transactions"],
+      "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+      "responses": { "200": { "$ref": "../responses/common.json#/GenericSuccess" } }
+    }
+  },
+  "transaction-status": {
+    "patch": {
+      "summary": "Update Transaction Status",
+      "tags": ["Transactions"],
+      "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": { "type": "string", "example": "Preparing" }
+              }
+            }
+          }
+        }
+      },
+      "responses": { "200": { "$ref": "../responses/common.json#/GenericSuccess" } }
+    }
+  }
+}

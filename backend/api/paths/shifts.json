@@ -1,0 +1,52 @@
+{
+  "open": {
+    "post": {
+      "summary": "Open Shift",
+      "tags": ["Shifts"],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "branch_id": { "type": "integer", "example": 1 },
+                "starting_cash": { "type": "number", "example": 500000 }
+              }
+            }
+          }
+        }
+      },
+      "responses": { "200": { "$ref": "../responses/common.json#/GenericSuccess" } }
+    }
+  },
+  "close": {
+    "patch": {
+      "summary": "Close Shift",
+      "tags": ["Shifts"],
+      "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "actual_cash": { "type": "number", "example": 1200000 }
+              }
+            }
+          }
+        }
+      },
+      "responses": { "200": { "$ref": "../responses/common.json#/GenericSuccess" } }
+    }
+  },
+  "verify": {
+    "patch": {
+      "summary": "Verify Shift",
+      "tags": ["Shifts"],
+      "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+      "responses": { "200": { "$ref": "../responses/common.json#/GenericSuccess" } }
+    }
+  }
+}

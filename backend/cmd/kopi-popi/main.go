@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/gilangages/kopi-popi/config"
+	config "github.com/gilangages/kopi-popi/configs"
 	"github.com/gin-gonic/gin"
 )
 

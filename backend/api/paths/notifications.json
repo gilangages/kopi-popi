@@ -1,0 +1,17 @@
+{
+  "notifications": {
+    "get": {
+      "summary": "Get Notifications",
+      "tags": ["Notifications"],
+      "responses": { "200": { "$ref": "../responses/common.json#/GenericSuccess" } }
+    }
+  },
+  "read": {
+    "patch": {
+      "summary": "Mark Notification As Read",
+      "tags": ["Notifications"],
+      "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+      "responses": { "200": { "$ref": "../responses/common.json#/GenericSuccess" } }
+    }
+  }
+}

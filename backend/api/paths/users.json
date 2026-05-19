@@ -1,0 +1,152 @@
+{
+  "me": {
+    "get": {
+      "summary": "Get My Profile",
+      "tags": ["Profile"],
+      "responses": {
+        "200": {
+          "description": "Success Response",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": { "$ref": "../schemas/common.json#/User" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "patch": {
+      "summary": "Update Profile",
+      "description": "Partial update for user profile. PATCH is used because it updates only specific fields without replacing the entire object.",
+      "tags": ["Profile"],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string", "example": "Gilang Baru" },
+                "phone": { "type": "string", "example": "081111111" },
+                "profile_picture": { "type": "string", "example": "profile-1.jpg" }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": { "$ref": "../responses/common.json#/GenericSuccess" }
+      }
+    }
+  },
+  "me-password": {
+    "patch": {
+      "summary": "Update Password",
+      "tags": ["Profile"],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "current_password": { "type": "string", "example": "passwordlama" },
+                "new_password": { "type": "string", "example": "passwordbaru" },
+                "confirm_password": { "type": "string", "example": "passwordbaru" }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": { "$ref": "../responses/common.json#/GenericSuccess" },
+        "400": { "$ref": "../responses/common.json#/GenericError" }
+      }
+    }
+  },
+  "me-profile-picture": {
+    "delete": {
+      "summary": "Delete Profile Picture",
+      "tags": ["Profile"],
+      "responses": {
+        "200": { "$ref": "../responses/common.json#/GenericSuccess" }
+      }
+    }
+  },
+  "users": {
+    "get": {
+      "summary": "Get All Users",
+      "tags": ["Users (Admin)"],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "type": "array",
+                    "items": { "$ref": "../schemas/common.json#/User" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "post": {
+      "summary": "Create User",
+      "tags": ["Users (Admin)"],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "role_id": { "type": "integer", "example": 2 },
+                "branch_id": { "type": "integer", "example": 1 },
+                "name": { "type": "string", "example": "Kasir" },
+                "email": { "type": "string", "example": "kasir@example.com" },
+                "password": { "type": "string", "example": "password123" }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": { "$ref": "../responses/common.json#/GenericSuccess" }
+      }
+    }
+  },
+  "user-detail": {
+    "patch": {
+      "summary": "Update User",
+      "tags": ["Users (Admin)"],
+      "parameters": [
+        { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+      ],
+      "responses": {
+        "200": { "$ref": "../responses/common.json#/GenericSuccess" }
+      }
+    }
+  },
+  "user-disable": {
+    "patch": {
+      "summary": "Disable User",
+      "tags": ["Users (Admin)"],
+      "parameters": [
+        { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+      ],
+      "responses": {
+        "200": { "$ref": "../responses/common.json#/GenericSuccess" }
+      }
+    }
+  }
+}

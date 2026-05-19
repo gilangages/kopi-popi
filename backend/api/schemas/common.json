@@ -1,0 +1,46 @@
+{
+  "ErrorResponse": {
+    "type": "object",
+    "properties": {
+      "errors": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Invalid request or unauthorized"
+          }
+        }
+      }
+    }
+  },
+  "User": {
+    "type": "object",
+    "properties": {
+      "id": { "type": "string", "format": "uuid" },
+      "name": { "type": "string" },
+      "email": { "type": "string", "format": "email" },
+      "phone": { "type": "string" },
+      "role": { "type": "string" },
+      "profile_picture": { "type": "string" }
+    }
+  },
+  "Product": {
+    "type": "object",
+    "properties": {
+      "id": { "type": "integer" },
+      "name": { "type": "string" },
+      "price": { "type": "number" },
+      "image_url": { "type": "string" },
+      "description": { "type": "string" },
+      "category_id": { "type": "integer" }
+    }
+  },
+  "Branch": {
+    "type": "object",
+    "properties": {
+      "id": { "type": "integer" },
+      "name": { "type": "string" },
+      "address": { "type": "string" }
+    }
+  }
+}

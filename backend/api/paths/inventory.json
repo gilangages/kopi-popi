@@ -1,0 +1,109 @@
+{
+  "materials": {
+    "get": {
+      "summary": "Get Materials",
+      "tags": ["Materials"],
+      "responses": { "200": { "$ref": "../responses/common.json#/GenericSuccess" } }
+    },
+    "post": {
+      "summary": "Create Material",
+      "tags": ["Materials"],
+      "responses": { "200": { "$ref": "../responses/common.json#/GenericSuccess" } }
+    }
+  },
+  "material-detail": {
+    "patch": {
+      "summary": "Update Material",
+      "tags": ["Materials"],
+      "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+      "responses": { "200": { "$ref": "../responses/common.json#/GenericSuccess" } }
+    },
+    "delete": {
+      "summary": "Delete Material",
+      "tags": ["Materials"],
+      "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+      "responses": { "200": { "$ref": "../responses/common.json#/GenericSuccess" } }
+    }
+  },
+  "inventories": {
+    "get": {
+      "summary": "Get Branch Inventory",
+      "tags": ["Inventory"],
+      "parameters": [
+        { "name": "branch_id", "in": "query", "schema": { "type": "integer" }, "example": 1 }
+      ],
+      "responses": { "200": { "$ref": "../responses/common.json#/GenericSuccess" } }
+    }
+  },
+  "inventory-movements": {
+    "get": {
+      "summary": "Get Inventory Movements",
+      "tags": ["Inventory"],
+      "responses": { "200": { "$ref": "../responses/common.json#/GenericSuccess" } }
+    }
+  },
+  "restock-requests": {
+    "post": {
+      "summary": "Create Restock Request",
+      "tags": ["Restock Requests"],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "branch_id": { "type": "integer", "example": 2 },
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "material_id": { "type": "integer", "example": 1 },
+                      "quantity_requested": { "type": "number", "example": 10 }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "responses": { "200": { "$ref": "../responses/common.json#/GenericSuccess" } }
+    },
+    "get": {
+      "summary": "Get Restock Requests",
+      "tags": ["Restock Requests"],
+      "responses": { "200": { "$ref": "../responses/common.json#/GenericSuccess" } }
+    }
+  },
+  "restock-approve": {
+    "patch": {
+      "summary": "Approve Restock Request",
+      "tags": ["Restock Requests"],
+      "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+      "responses": { "200": { "$ref": "../responses/common.json#/GenericSuccess" } }
+    }
+  },
+  "restock-reject": {
+    "patch": {
+      "summary": "Reject Restock Request",
+      "tags": ["Restock Requests"],
+      "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "reason": { "type": "string", "example": "Stock kosong" }
+              }
+            }
+          }
+        }
+      },
+      "responses": { "200": { "$ref": "../responses/common.json#/GenericSuccess" } }
+    }
+  }
+}
