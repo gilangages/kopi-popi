@@ -2,6 +2,7 @@ package main
 
 import (
 	config "github.com/gilangages/kopi-popi/configs"
+	"github.com/gilangages/kopi-popi/internal/auth"
 	"github.com/gilangages/kopi-popi/pkg/response"
 	"github.com/gin-gonic/gin"
 )
@@ -9,12 +10,13 @@ import (
 func main() {
 	// 1. Inisialisasi Koneksi ke Database
 	// Memastikan database menyala sebelum route dijalankan
-	config.ConnectDB()
+	db := config.ConnectDB()
+	defer db.Close()
 
 	// 2. Setup Framework Gin (Router)
 	r := gin.Default()
 
-	// 3. Setup Global Middleware CORS (Opsional tapi wajib untuk dipanggil frontend/React/Vue nanti)
+	// 3. Setup Global Middleware CORS
 	r.Use(func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS")
@@ -27,7 +29,6 @@ func main() {
 	})
 
 	// 4. Register Health Check Endpoint (Public)
-	// Kita tes panggil Response Helper buatan kita di Fase 1
 	r.GET("/", func(c *gin.Context) {
 		response.Success(c, 200, gin.H{
 			"message": "Welcome to Kopi-Popi API!",
@@ -35,12 +36,18 @@ func main() {
 		})
 	})
 
-	// Todo di Fase Selanjutnya:
-	// Di sini nanti kita akan mendaftarkan router per-domain.
-	// Contoh: 
-	// auth_routes.Setup(r)
-	// catalog_routes.Setup(r)
+	// 5. Inisialisasi Domain Auth
+	authRepo := auth.NewRepository(db)
+	authService := auth.NewService(authRepo)
+	authHandler := auth.NewHandler(authService)
 
-	// 5. Jalankan Server di port 8080
+	// 6. Daftarkan router per-domain
+	authRoutes := r.Group("/auth")
+	{
+		authRoutes.POST("/register", authHandler.Register)
+		authRoutes.POST("/login", authHandler.Login)
+	}
+
+	// 7. Jalankan Server di port 8080
 	r.Run(":8080")
 }
