@@ -1,0 +1,7 @@
+.git
+.env
+api/openapi-bundled.json
+node_modules
+*.exe
+*.log
+tmp

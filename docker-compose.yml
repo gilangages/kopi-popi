@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  # 1. Service Database (MySQL 8)
+  mysql_db:
+    image: mysql:8
+    container_name: kopi_popi_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: kopi_popi
+    ports:
+      # Map ke 3307 di laptop agar tidak bentrok dengan Laragon (3306)
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  # 2. Service Backend (Aplikasi Golang)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: kopi_popi_backend
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - APP_PORT=8080
+      - DB_HOST=mysql_db
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=root
+      - DB_NAME=kopi_popi
+      - JWT_SECRET=supersecret
+    depends_on:
+      - mysql_db
+
+  # 3. Service phpMyAdmin (Untuk melihat isi database via browser)
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: kopi_popi_phpmyadmin
+    restart: always
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: mysql_db
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: root
+    depends_on:
+      - mysql_db
+
+volumes:
+  mysql_data:
