@@ -13,7 +13,7 @@ import (
 func ConnectDB() *sql.DB {
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Println("Warning: Error loading .env file, relying on system environment variables")
 	}
 
 	host := os.Getenv("DB_HOST")
