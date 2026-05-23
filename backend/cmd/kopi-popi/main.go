@@ -49,6 +49,9 @@ func main() {
 	{
 		authRoutes.POST("/register", authHandler.Register)
 		authRoutes.POST("/login", authHandler.Login)
+		authRoutes.POST("/forgot-password", authHandler.ForgotPassword)
+		authRoutes.POST("/reset-password", authHandler.ResetPassword)
+		authRoutes.DELETE("/logout", authHandler.Logout)
 	}
 
 	// 7. Jalankan Server di port 8080

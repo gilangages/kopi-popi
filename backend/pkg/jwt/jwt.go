@@ -10,10 +10,16 @@ import (
 
 // GenerateToken membuat JWT token yang berisi informasi user (Claims).
 // Biasanya dipanggil ketika user berhasil Login.
-func GenerateToken(userID string, name string, role string) (string, error) {
+func GenerateToken(userID string, name string, role string, rememberMe bool) (string, error) {
 	secret := os.Getenv("JWT_SECRET")
 	if secret == "" {
 		return "", errors.New("fatal: JWT_SECRET environment variable is not set")
+	}
+
+	// Menentukan masa aktif token
+	expiryTime := time.Now().Add(time.Hour * 24) // Default 24 jam
+	if rememberMe {
+		expiryTime = time.Now().Add(time.Hour * 24 * 30) // 30 hari jika "Ingat Saya" dicentang
 	}
 
 	// Payload / Isi Token
@@ -21,7 +27,7 @@ func GenerateToken(userID string, name string, role string) (string, error) {
 		"user_id": userID,
 		"name":    name,
 		"role":    role,
-		"exp":     time.Now().Add(time.Hour * 24).Unix(), // Token expired dalam 24 jam
+		"exp":     expiryTime.Unix(),
 	}
 
 	// Membuat token dengan metode algoritma HS256

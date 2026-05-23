@@ -3,6 +3,8 @@ package auth
 import (
 	"context"
 	"errors"
+	"log"
+	"time"
 
 	"github.com/gilangages/kopi-popi/pkg/hash"
 	"github.com/gilangages/kopi-popi/pkg/jwt"
@@ -12,6 +14,8 @@ import (
 type Service interface {
 	Register(ctx context.Context, req RegisterRequest) (*User, error)
 	Login(ctx context.Context, req LoginRequest) (string, *User, error)
+	ForgotPassword(ctx context.Context, req ForgotPasswordRequest) error
+	ResetPassword(ctx context.Context, req ResetPasswordRequest) error
 }
 
 type authService struct {
@@ -91,10 +95,84 @@ func (s *authService) Login(ctx context.Context, req LoginRequest) (string, *Use
 		roleName = "Cashier"
 	}
 
-	token, err := jwt.GenerateToken(user.ID, user.Name, roleName)
+	token, err := jwt.GenerateToken(user.ID, user.Name, roleName, req.RememberMe)
 	if err != nil {
 		return "", nil, err
 	}
 
 	return token, user, nil
+}
+
+func (s *authService) ForgotPassword(ctx context.Context, req ForgotPasswordRequest) error {
+	// 1. Cek apakah email terdaftar
+	user, err := s.repo.FindByEmail(ctx, req.Email)
+	if err != nil {
+		return err
+	}
+	if user == nil {
+		// Security best practice: Jangan beri tahu email tidak ada,
+		// pura-pura sukses agar tidak bisa ditebak (enumeration)
+		return nil
+	}
+
+	// 2. Generate Reset Token (UUID biasa sudah cukup aman)
+	resetToken := uuid.New().String()
+
+	// 3. Simpan ke Database
+	pwReset := &PasswordReset{
+		Email:     req.Email,
+		Token:     resetToken,
+		ExpiresAt: time.Now().Add(time.Hour * 1), // Berlaku 1 jam
+	}
+
+	// Hapus token lama jika ada agar tidak menumpuk
+	_ = s.repo.DeletePasswordReset(ctx, req.Email)
+
+	err = s.repo.CreatePasswordReset(ctx, pwReset)
+	if err != nil {
+		return err
+	}
+
+	// 4. Simulasi pengiriman email
+	// Di sistem nyata, panggil fungsi pengirim email (misal via SMTP / SendGrid)
+	log.Printf("\n======================================================\n")
+	log.Printf("MENGIRIM EMAIL KE: %s\n", req.Email)
+	log.Printf("LINK RESET PASSWORD: http://localhost:3000/reset-password?token=%s\n", resetToken)
+	log.Printf("======================================================\n\n")
+	
+	return nil
+}
+
+func (s *authService) ResetPassword(ctx context.Context, req ResetPasswordRequest) error {
+	// 1. Cari token di database
+	pwReset, err := s.repo.FindPasswordResetByToken(ctx, req.Token)
+	if err != nil {
+		return err
+	}
+	if pwReset == nil {
+		return errors.New("invalid or expired token")
+	}
+
+	// 2. Cek kedaluwarsa
+	if time.Now().After(pwReset.ExpiresAt) {
+		_ = s.repo.DeletePasswordReset(ctx, pwReset.Email) // Bersihkan token
+		return errors.New("invalid or expired token")
+	}
+
+	// 3. Hash password baru
+	hashedPassword, err := hash.MakeHash(req.NewPassword)
+	if err != nil {
+		return err
+	}
+
+	// 4. Update password di tabel users
+	err = s.repo.UpdatePassword(ctx, pwReset.Email, hashedPassword)
+	if err != nil {
+		return err
+	}
+
+	// 5. Hapus token agar tidak bisa dipakai 2x
+	_ = s.repo.DeletePasswordReset(ctx, pwReset.Email)
+
+	return nil
 }

@@ -110,6 +110,10 @@
                   "password": {
                     "type": "string",
                     "example": "rahasia123"
+                  },
+                  "remember_me": {
+                    "type": "boolean",
+                    "example": true
                   }
                 }
               }
@@ -204,10 +208,6 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "email": {
-                    "type": "string",
-                    "example": "gilang@gmail.com"
-                  },
                   "token": {
                     "type": "string",
                     "example": "123456"
