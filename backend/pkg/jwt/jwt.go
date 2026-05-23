@@ -10,7 +10,7 @@ import (
 
 // GenerateToken membuat JWT token yang berisi informasi user (Claims).
 // Biasanya dipanggil ketika user berhasil Login.
-func GenerateToken(userID string, name string, role string, rememberMe bool) (string, error) {
+func GenerateToken(userID string, name string, role string, branchID *int, rememberMe bool) (string, error) {
 	secret := os.Getenv("JWT_SECRET")
 	if secret == "" {
 		return "", errors.New("fatal: JWT_SECRET environment variable is not set")
@@ -24,10 +24,11 @@ func GenerateToken(userID string, name string, role string, rememberMe bool) (st
 
 	// Payload / Isi Token
 	claims := jwt.MapClaims{
-		"user_id": userID,
-		"name":    name,
-		"role":    role,
-		"exp":     expiryTime.Unix(),
+		"user_id":   userID,
+		"name":      name,
+		"role":      role,
+		"branch_id": branchID,
+		"exp":       expiryTime.Unix(),
 	}
 
 	// Membuat token dengan metode algoritma HS256

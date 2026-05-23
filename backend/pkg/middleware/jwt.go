@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"net/http"
 	"strings"
 
 	"github.com/gilangages/kopi-popi/pkg/jwt"
@@ -9,42 +8,39 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// RequireAuth adalah penjaga gerbang yang mewajibkan user mengirim JWT Token.
-// Dipasang di endpoint yang bersifat "Protected".
+// RequireAuth adalah middleware untuk mengecek keabsahan token JWT dari header Authorization.
+// Jika valid, data payload (claims) akan disisipkan ke dalam context (c.Set).
 func RequireAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
-			response.Error(c, http.StatusUnauthorized, "Authorization header is missing")
+			response.Error(c, 401, "Unauthorized: Missing Authorization header")
 			c.Abort()
 			return
 		}
 
-		// Format token harus: "Bearer <token>"
+		// Header harus berformat "Bearer <token>"
 		parts := strings.Split(authHeader, " ")
 		if len(parts) != 2 || parts[0] != "Bearer" {
-			response.Error(c, http.StatusUnauthorized, "Invalid authorization format. Use 'Bearer <token>'")
+			response.Error(c, 401, "Unauthorized: Invalid Authorization header format")
 			c.Abort()
 			return
 		}
 
 		tokenString := parts[1]
-
-		// Validasi signature token menggunakan package jwt kita
 		claims, err := jwt.ValidateToken(tokenString)
 		if err != nil {
-			response.Error(c, http.StatusUnauthorized, "Invalid or expired token")
+			response.Error(c, 401, "Unauthorized: Invalid or expired token")
 			c.Abort()
 			return
 		}
 
-		// Simpan data (claims) dari token ke dalam Context
-		// Tujuannya agar nanti di Handler kita bisa memanggil c.Get("user_id")
+		// Menyisipkan data claims ke dalam Gin context untuk dipakai oleh Handler selanjutnya
 		c.Set("user_id", claims["user_id"])
 		c.Set("name", claims["name"])
 		c.Set("role", claims["role"])
+		c.Set("branch_id", claims["branch_id"]) // Bisa null (nil) untuk Admin/Customer
 
-		// Lolos dari middleware, lanjut ke handler berikutnya
 		c.Next()
 	}
 }

@@ -3,6 +3,8 @@ package main
 import (
 	config "github.com/gilangages/kopi-popi/configs"
 	"github.com/gilangages/kopi-popi/internal/auth"
+	"github.com/gilangages/kopi-popi/internal/users"
+	"github.com/gilangages/kopi-popi/pkg/middleware"
 	"github.com/gilangages/kopi-popi/pkg/response"
 	"github.com/gin-gonic/gin"
 )
@@ -44,7 +46,12 @@ func main() {
 	authService := auth.NewService(authRepo)
 	authHandler := auth.NewHandler(authService)
 
-	// 6. Daftarkan router per-domain
+	// 5b. Inisialisasi Domain Users
+	usersRepo := users.NewRepository(db)
+	usersService := users.NewService(usersRepo)
+	usersHandler := users.NewHandler(usersService)
+
+	// 6. Daftarkan router per-domain (Public)
 	authRoutes := r.Group("/auth")
 	{
 		authRoutes.POST("/register", authHandler.Register)
@@ -54,6 +61,24 @@ func main() {
 		authRoutes.DELETE("/logout", authHandler.Logout)
 	}
 
-	// 7. Jalankan Server di port 8080
+	// 7. Daftarkan router per-domain (Protected by JWT)
+	protectedRoutes := r.Group("/")
+	protectedRoutes.Use(middleware.RequireAuth())
+	{
+		// Users Profile
+		protectedRoutes.GET("/users/me", usersHandler.GetMyProfile)
+		protectedRoutes.PATCH("/users/me", usersHandler.UpdateMyProfile) // PATCH as per openapi
+		protectedRoutes.PUT("/users/me/password", usersHandler.UpdateMyPassword)
+		protectedRoutes.POST("/users/me/request-email-otp", usersHandler.RequestEmailOTP)
+		protectedRoutes.PUT("/users/me/email", usersHandler.VerifyEmailOTP)
+
+		// Employees Management
+		protectedRoutes.GET("/users/employees", usersHandler.GetEmployees)
+		protectedRoutes.POST("/users/managers", usersHandler.CreateManager)
+		protectedRoutes.POST("/users/cashiers", usersHandler.CreateCashier)
+		protectedRoutes.PATCH("/users/:id/disable", usersHandler.DisableEmployee)
+	}
+
+	// 8. Jalankan Server di port 8080
 	r.Run(":8080")
 }
