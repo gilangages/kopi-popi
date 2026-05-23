@@ -41,20 +41,29 @@
     "/auth/reset-password": {
       "$ref": "./paths/auth.json#/reset-password"
     },
-    "/me": {
+    "/users": {
+      "$ref": "./paths/users.json#/root"
+    },
+    "/users/me": {
       "$ref": "./paths/users.json#/me"
     },
-    "/me/password": {
+    "/users/me/password": {
       "$ref": "./paths/users.json#/me-password"
     },
-    "/me/profile-picture": {
+    "/users/me/profile-picture": {
       "$ref": "./paths/users.json#/me-profile-picture"
     },
-    "/users": {
-      "$ref": "./paths/users.json#/users"
+    "/users/me/request-email-otp": {
+      "$ref": "./paths/users.json#/request-email-otp"
     },
-    "/users/{id}": {
-      "$ref": "./paths/users.json#/user-detail"
+    "/users/me/email": {
+      "$ref": "./paths/users.json#/me-email"
+    },
+    "/users/managers": {
+      "$ref": "./paths/users.json#/managers"
+    },
+    "/users/cashiers": {
+      "$ref": "./paths/users.json#/cashiers"
     },
     "/users/{id}/disable": {
       "$ref": "./paths/users.json#/user-disable"

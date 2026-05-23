@@ -232,7 +232,36 @@
         }
       }
     },
-    "/me": {
+    "/users": {
+      "get": {
+        "summary": "Get All Users (Admin/Manager)",
+        "description": "Fetch a list of all users in the system. Admin can see everyone (including other Admins, Managers, Cashiers, and Customers). Manager can only see employees in their branch.",
+        "tags": [
+          "Users (Employee Management)"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/User"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/me": {
       "get": {
         "summary": "Get My Profile",
         "tags": [
@@ -293,7 +322,7 @@
         }
       }
     },
-    "/me/password": {
+    "/users/me/password": {
       "patch": {
         "summary": "Update Password",
         "tags": [
@@ -333,7 +362,7 @@
         }
       }
     },
-    "/me/profile-picture": {
+    "/users/me/profile-picture": {
       "delete": {
         "summary": "Delete Profile Picture",
         "tags": [
@@ -346,37 +375,11 @@
         }
       }
     },
-    "/users": {
-      "get": {
-        "summary": "Get All Users",
-        "tags": [
-          "Users (Admin)"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/User"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
+    "/users/me/request-email-otp": {
       "post": {
-        "summary": "Create User",
+        "summary": "Request Email Change OTP",
         "tags": [
-          "Users (Admin)"
+          "Profile"
         ],
         "requestBody": {
           "required": true,
@@ -385,17 +388,115 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "role_id": {
-                    "type": "integer",
-                    "example": 2
+                  "new_email": {
+                    "type": "string",
+                    "example": "gilang_baru@gmail.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GenericSuccess"
+          }
+        }
+      }
+    },
+    "/users/me/email": {
+      "put": {
+        "summary": "Verify OTP & Update Email",
+        "tags": [
+          "Profile"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "otp": {
+                    "type": "string",
+                    "example": "123456"
                   },
+                  "new_email": {
+                    "type": "string",
+                    "example": "gilang_baru@gmail.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GenericSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/GenericError"
+          }
+        }
+      }
+    },
+    "/users/managers": {
+      "post": {
+        "summary": "Create Manager (Admin Only)",
+        "tags": [
+          "Users (Employee Management)"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
                   "branch_id": {
                     "type": "integer",
                     "example": 1
                   },
                   "name": {
                     "type": "string",
-                    "example": "Kasir"
+                    "example": "Budi Manager"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "manager@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "password123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GenericSuccess"
+          }
+        }
+      }
+    },
+    "/users/cashiers": {
+      "post": {
+        "summary": "Create Cashier (Manager Only)",
+        "tags": [
+          "Users (Employee Management)"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Siti Kasir"
                   },
                   "email": {
                     "type": "string",
@@ -417,34 +518,11 @@
         }
       }
     },
-    "/users/{id}": {
-      "patch": {
-        "summary": "Update User",
-        "tags": [
-          "Users (Admin)"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GenericSuccess"
-          }
-        }
-      }
-    },
     "/users/{id}/disable": {
       "patch": {
-        "summary": "Disable User",
+        "summary": "Disable/Deactivate User (Admin Only)",
         "tags": [
-          "Users (Admin)"
+          "Users (Employee Management)"
         ],
         "parameters": [
           {

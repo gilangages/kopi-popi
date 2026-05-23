@@ -95,7 +95,7 @@ func (s *authService) Login(ctx context.Context, req LoginRequest) (string, *Use
 		roleName = "Cashier"
 	}
 
-	token, err := jwt.GenerateToken(user.ID, user.Name, roleName, req.RememberMe)
+	token, err := jwt.GenerateToken(user.ID, user.Name, roleName, user.BranchID, req.RememberMe)
 	if err != nil {
 		return "", nil, err
 	}

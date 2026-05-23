@@ -77,10 +77,57 @@
       }
     }
   },
-  "users": {
+  "request-email-otp": {
+    "post": {
+      "summary": "Request Email Change OTP",
+      "tags": ["Profile"],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "new_email": { "type": "string", "example": "gilang_baru@gmail.com" }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": { "$ref": "../responses/common.json#/GenericSuccess" }
+      }
+    }
+  },
+  "me-email": {
+    "put": {
+      "summary": "Verify OTP & Update Email",
+      "tags": ["Profile"],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "otp": { "type": "string", "example": "123456" },
+                "new_email": { "type": "string", "example": "gilang_baru@gmail.com" }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": { "$ref": "../responses/common.json#/GenericSuccess" },
+        "400": { "$ref": "../responses/common.json#/GenericError" }
+      }
+    }
+  },
+  "root": {
     "get": {
-      "summary": "Get All Users",
-      "tags": ["Users (Admin)"],
+      "summary": "Get All Users (Admin/Manager)",
+      "description": "Fetch a list of all users in the system. Admin can see everyone (including other Admins, Managers, Cashiers, and Customers). Manager can only see employees in their branch.",
+      "tags": ["Users (Employee Management)"],
       "responses": {
         "200": {
           "description": "Success",
@@ -99,10 +146,12 @@
           }
         }
       }
-    },
+    }
+  },
+  "managers": {
     "post": {
-      "summary": "Create User",
-      "tags": ["Users (Admin)"],
+      "summary": "Create Manager (Admin Only)",
+      "tags": ["Users (Employee Management)"],
       "requestBody": {
         "required": true,
         "content": {
@@ -110,9 +159,32 @@
             "schema": {
               "type": "object",
               "properties": {
-                "role_id": { "type": "integer", "example": 2 },
                 "branch_id": { "type": "integer", "example": 1 },
-                "name": { "type": "string", "example": "Kasir" },
+                "name": { "type": "string", "example": "Budi Manager" },
+                "email": { "type": "string", "example": "manager@example.com" },
+                "password": { "type": "string", "example": "password123" }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": { "$ref": "../responses/common.json#/GenericSuccess" }
+      }
+    }
+  },
+  "cashiers": {
+    "post": {
+      "summary": "Create Cashier (Manager Only)",
+      "tags": ["Users (Employee Management)"],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string", "example": "Siti Kasir" },
                 "email": { "type": "string", "example": "kasir@example.com" },
                 "password": { "type": "string", "example": "password123" }
               }
@@ -125,22 +197,10 @@
       }
     }
   },
-  "user-detail": {
-    "patch": {
-      "summary": "Update User",
-      "tags": ["Users (Admin)"],
-      "parameters": [
-        { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
-      ],
-      "responses": {
-        "200": { "$ref": "../responses/common.json#/GenericSuccess" }
-      }
-    }
-  },
   "user-disable": {
     "patch": {
-      "summary": "Disable User",
-      "tags": ["Users (Admin)"],
+      "summary": "Disable/Deactivate User (Admin Only)",
+      "tags": ["Users (Employee Management)"],
       "parameters": [
         { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
       ],

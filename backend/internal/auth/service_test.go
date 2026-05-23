@@ -137,6 +137,37 @@ func TestLogin_Success(t *testing.T) {
 	mockRepo.AssertExpectations(t)
 }
 
+func TestLogin_Admin_Success(t *testing.T) {
+	mockRepo := new(mockRepository)
+	service := NewService(mockRepo)
+
+	password := "admin123"
+	hashedPassword, _ := hash.MakeHash(password)
+
+	user := &User{
+		ID:           "admin-uuid-1",
+		Name:         "Super Admin",
+		Email:        "admin@kopipopi.com",
+		PasswordHash: hashedPassword,
+		RoleID:       1, // 1 = Admin
+	}
+
+	req := LoginRequest{
+		Email:      "admin@kopipopi.com",
+		Password:   "admin123",
+		RememberMe: false,
+	}
+
+	mockRepo.On("FindByEmail", mock.Anything, req.Email).Return(user, nil)
+
+	token, returnedUser, err := service.Login(context.Background(), req)
+
+	assert.NoError(t, err)
+	assert.NotEmpty(t, token)
+	assert.Equal(t, user.ID, returnedUser.ID)
+	mockRepo.AssertExpectations(t)
+}
+
 func TestLogin_InvalidEmailOrPassword(t *testing.T) {
 	mockRepo := new(mockRepository)
 	service := NewService(mockRepo)
