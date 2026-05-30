@@ -544,10 +544,22 @@
     "/branches": {
       "get": {
         "summary": "Get All Branches",
+        "description": "Fetch a list of all branches. Public users see only active branches. Admins see all branches.",
         "tags": [
           "Branches"
         ],
         "security": [],
+        "parameters": [
+          {
+            "name": "include_inactive",
+            "in": "query",
+            "description": "If true, includes inactive branches (Admin only).",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Success",
@@ -566,6 +578,82 @@
                 }
               }
             }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Branch (Admin Only)",
+        "tags": [
+          "Branches"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBranchRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GenericSuccess"
+          }
+        }
+      }
+    },
+    "/branches/{id}": {
+      "put": {
+        "summary": "Update Branch (Admin Only)",
+        "tags": [
+          "Branches"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBranchRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GenericSuccess"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Soft Delete Branch (Admin Only)",
+        "description": "Sets is_active to false instead of physical deletion.",
+        "tags": [
+          "Branches"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GenericSuccess"
           }
         }
       }
@@ -1506,6 +1594,51 @@
           },
           "address": {
             "type": "string"
+          },
+          "is_active": {
+            "type": "boolean"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CreateBranchRequest": {
+        "type": "object",
+        "required": [
+          "name",
+          "address"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Cabang Bandung"
+          },
+          "address": {
+            "type": "string",
+            "example": "Jl. Braga No. 10, Bandung"
+          }
+        }
+      },
+      "UpdateBranchRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Cabang Bandung Baru"
+          },
+          "address": {
+            "type": "string",
+            "example": "Jl. Braga No. 15, Bandung"
+          },
+          "is_active": {
+            "type": "boolean",
+            "example": true
           }
         }
       },

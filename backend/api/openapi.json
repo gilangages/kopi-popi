@@ -71,6 +71,9 @@
     "/branches": {
       "$ref": "./paths/branches.json#/branches"
     },
+    "/branches/{id}": {
+      "$ref": "./paths/branches.json#/branch-detail"
+    },
     "/categories": {
       "$ref": "./paths/catalog.json#/categories"
     },

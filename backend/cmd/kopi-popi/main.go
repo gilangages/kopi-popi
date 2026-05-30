@@ -3,6 +3,7 @@ package main
 import (
 	config "github.com/gilangages/kopi-popi/configs"
 	"github.com/gilangages/kopi-popi/internal/auth"
+	"github.com/gilangages/kopi-popi/internal/branches"
 	"github.com/gilangages/kopi-popi/internal/users"
 	"github.com/gilangages/kopi-popi/pkg/middleware"
 	"github.com/gilangages/kopi-popi/pkg/response"
@@ -51,6 +52,11 @@ func main() {
 	usersService := users.NewService(usersRepo)
 	usersHandler := users.NewHandler(usersService)
 
+	// 5c. Inisialisasi Domain Branches
+	branchesRepo := branches.NewRepository(db)
+	branchesService := branches.NewService(branchesRepo)
+	branchesHandler := branches.NewHandler(branchesService)
+
 	// 6. Daftarkan router per-domain (Public)
 	authRoutes := r.Group("/auth")
 	{
@@ -78,8 +84,21 @@ func main() {
 		protectedRoutes.POST("/users/managers", usersHandler.CreateManager)
 		protectedRoutes.POST("/users/cashiers", usersHandler.CreateCashier)
 		protectedRoutes.PATCH("/users/:id/disable", usersHandler.DisableEmployee)
+
+		// Branches Management (ADMIN)
+		protectedRoutes.POST("/branches", branchesHandler.CreateBranch)
+		protectedRoutes.PUT("/branches/:id", branchesHandler.UpdateBranch)
+		protectedRoutes.DELETE("/branches/:id", branchesHandler.DeleteBranch)
 	}
 
-	// 8. Jalankan Server di port 8080
+	// 8. Daftarkan router dengan Optional Auth (untuk public route yang behavior-nya berubah jika login)
+	optionalAuthRoutes := r.Group("/")
+	optionalAuthRoutes.Use(middleware.OptionalAuth())
+	{
+		// Branches Public (Bisa dilihat tanpa login, tapi Admin bisa request include_inactive)
+		optionalAuthRoutes.GET("/branches", branchesHandler.GetAllBranches)
+	}
+
+	// 9. Jalankan Server di port 8080
 	r.Run(":8080")
 }

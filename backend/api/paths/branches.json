@@ -2,8 +2,20 @@
   "branches": {
     "get": {
       "summary": "Get All Branches",
+      "description": "Fetch a list of all branches. Public users see only active branches. Admins see all branches.",
       "tags": ["Branches"],
       "security": [],
+      "parameters": [
+        {
+          "name": "include_inactive",
+          "in": "query",
+          "description": "If true, includes inactive branches (Admin only).",
+          "required": false,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
       "responses": {
         "200": {
           "description": "Success",
@@ -21,6 +33,52 @@
             }
           }
         }
+      }
+    },
+    "post": {
+      "summary": "Create Branch (Admin Only)",
+      "tags": ["Branches"],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "../schemas/common.json#/CreateBranchRequest" }
+          }
+        }
+      },
+      "responses": {
+        "200": { "$ref": "../responses/common.json#/GenericSuccess" }
+      }
+    }
+  },
+  "branch-detail": {
+    "put": {
+      "summary": "Update Branch (Admin Only)",
+      "tags": ["Branches"],
+      "parameters": [
+        { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "../schemas/common.json#/UpdateBranchRequest" }
+          }
+        }
+      },
+      "responses": {
+        "200": { "$ref": "../responses/common.json#/GenericSuccess" }
+      }
+    },
+    "delete": {
+      "summary": "Soft Delete Branch (Admin Only)",
+      "description": "Sets is_active to false instead of physical deletion.",
+      "tags": ["Branches"],
+      "parameters": [
+        { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+      ],
+      "responses": {
+        "200": { "$ref": "../responses/common.json#/GenericSuccess" }
       }
     }
   }

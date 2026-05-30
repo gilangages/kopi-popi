@@ -40,7 +40,26 @@
     "properties": {
       "id": { "type": "integer" },
       "name": { "type": "string" },
-      "address": { "type": "string" }
+      "address": { "type": "string" },
+      "is_active": { "type": "boolean" },
+      "created_at": { "type": "string", "format": "date-time" },
+      "updated_at": { "type": "string", "format": "date-time" }
+    }
+  },
+  "CreateBranchRequest": {
+    "type": "object",
+    "required": ["name", "address"],
+    "properties": {
+      "name": { "type": "string", "example": "Cabang Bandung" },
+      "address": { "type": "string", "example": "Jl. Braga No. 10, Bandung" }
+    }
+  },
+  "UpdateBranchRequest": {
+    "type": "object",
+    "properties": {
+      "name": { "type": "string", "example": "Cabang Bandung Baru" },
+      "address": { "type": "string", "example": "Jl. Braga No. 15, Bandung" },
+      "is_active": { "type": "boolean", "example": true }
     }
   }
 }

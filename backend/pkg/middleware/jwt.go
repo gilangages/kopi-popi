@@ -44,3 +44,31 @@ func RequireAuth() gin.HandlerFunc {
 		c.Next()
 	}
 }
+
+// OptionalAuth adalah middleware untuk rute publik yang perilakunya bisa berbeda jika dipanggil oleh user yang login (memiliki token).
+func OptionalAuth() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		authHeader := c.GetHeader("Authorization")
+		if authHeader == "" {
+			c.Next()
+			return
+		}
+
+		parts := strings.Split(authHeader, " ")
+		if len(parts) != 2 || parts[0] != "Bearer" {
+			c.Next()
+			return
+		}
+
+		tokenString := parts[1]
+		claims, err := jwt.ValidateToken(tokenString)
+		if err == nil {
+			c.Set("user_id", claims["user_id"])
+			c.Set("name", claims["name"])
+			c.Set("role", claims["role"])
+			c.Set("branch_id", claims["branch_id"])
+		}
+		
+		c.Next()
+	}
+}
