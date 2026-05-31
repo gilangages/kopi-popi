@@ -68,29 +68,29 @@
     "/users/{id}/disable": {
       "$ref": "./paths/users.json#/user-disable"
     },
+    "/categories": {
+      "$ref": "./paths/catalogues.json#/categories"
+    },
+    "/categories/{id}": {
+      "$ref": "./paths/catalogues.json#/category-detail"
+    },
+    "/materials": {
+      "$ref": "./paths/catalogues.json#/materials"
+    },
+    "/materials/{id}": {
+      "$ref": "./paths/catalogues.json#/material-detail"
+    },
+    "/products": {
+      "$ref": "./paths/catalogues.json#/products"
+    },
+    "/products/{id}": {
+      "$ref": "./paths/catalogues.json#/product-detail"
+    },
     "/branches": {
       "$ref": "./paths/branches.json#/branches"
     },
     "/branches/{id}": {
       "$ref": "./paths/branches.json#/branch-detail"
-    },
-    "/categories": {
-      "$ref": "./paths/catalog.json#/categories"
-    },
-    "/products": {
-      "$ref": "./paths/catalog.json#/products"
-    },
-    "/products/{id}": {
-      "$ref": "./paths/catalog.json#/product-detail"
-    },
-    "/products/{id}/boms": {
-      "$ref": "./paths/catalog.json#/product-boms"
-    },
-    "/materials": {
-      "$ref": "./paths/inventory.json#/materials"
-    },
-    "/materials/{id}": {
-      "$ref": "./paths/inventory.json#/material-detail"
     },
     "/inventories": {
       "$ref": "./paths/inventory.json#/inventories"
@@ -136,6 +136,9 @@
     },
     "/shifts/{id}/verify": {
       "$ref": "./paths/shifts.json#/verify"
+    },
+    "/uploads": {
+      "$ref": "./paths/media.json#/uploads"
     },
     "/notifications": {
       "$ref": "./paths/notifications.json#/notifications"

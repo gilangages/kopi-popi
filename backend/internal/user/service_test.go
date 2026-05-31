@@ -1,4 +1,4 @@
-package users
+package user
 
 import (
 	"context"
@@ -156,7 +156,7 @@ func TestUpdateMyPassword_Success(t *testing.T) {
 	}
 
 	mockRepo.On("FindByID", mock.Anything, "user-123").Return(mockUser, nil)
-	mockRepo.On("Update", mock.Anything, mock.AnythingOfType("*users.User")).Return(nil)
+	mockRepo.On("Update", mock.Anything, mock.AnythingOfType("*user.User")).Return(nil)
 
 	err := service.UpdateMyPassword(context.Background(), "user-123", req)
 

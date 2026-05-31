@@ -1,0 +1,77 @@
+{
+  "Category": {
+    "type": "object",
+    "properties": {
+      "id": { "type": "integer" },
+      "name": { "type": "string", "example": "Kopi" }
+    }
+  },
+  "CategoryRequest": {
+    "type": "object",
+    "required": ["name"],
+    "properties": {
+      "name": { "type": "string", "example": "Kopi" }
+    }
+  },
+  "Material": {
+    "type": "object",
+    "properties": {
+      "id": { "type": "integer" },
+      "category_id": { "type": "integer" },
+      "name": { "type": "string", "example": "Biji Kopi Arabica" },
+      "unit": { "type": "string", "example": "gram" },
+      "created_at": { "type": "string", "format": "date-time" }
+    }
+  },
+  "MaterialRequest": {
+    "type": "object",
+    "required": ["category_id", "name", "unit"],
+    "properties": {
+      "category_id": { "type": "integer", "example": 1 },
+      "name": { "type": "string", "example": "Biji Kopi Arabica" },
+      "unit": { "type": "string", "example": "gram" }
+    }
+  },
+  "ProductBOM": {
+    "type": "object",
+    "properties": {
+      "material_id": { "type": "integer", "example": 1 },
+      "quantity_needed": { "type": "number", "format": "float", "example": 15.5 }
+    }
+  },
+  "Product": {
+    "type": "object",
+    "properties": {
+      "id": { "type": "integer" },
+      "category_id": { "type": "integer" },
+      "name": { "type": "string", "example": "Kopi Susu Aren" },
+      "description": { "type": "string", "example": "Perpaduan espresso dan aren manis" },
+      "price": { "type": "number", "format": "float", "example": 20000 },
+      "image_url": { "type": "string" },
+      "is_active": { "type": "boolean" },
+      "created_at": { "type": "string", "format": "date-time" },
+      "updated_at": { "type": "string", "format": "date-time" },
+      "recipe": {
+        "type": "array",
+        "items": { "$ref": "#/ProductBOM" }
+      }
+    }
+  },
+  "ProductRequest": {
+    "type": "object",
+    "required": ["category_id", "name", "price", "recipe"],
+    "properties": {
+      "category_id": { "type": "integer", "example": 1 },
+      "name": { "type": "string", "example": "Kopi Susu Aren" },
+      "description": { "type": "string", "example": "Perpaduan espresso dan aren manis" },
+      "price": { "type": "number", "format": "float", "example": 20000 },
+      "image_url": { "type": "string", "example": "https://example.com/kopi.jpg" },
+      "is_active": { "type": "boolean", "example": true },
+      "recipe": {
+        "type": "array",
+        "items": { "$ref": "#/ProductBOM" },
+        "description": "BOM/Resep bahan baku yang dibutuhkan"
+      }
+    }
+  }
+}

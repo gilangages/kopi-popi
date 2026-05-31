@@ -32,6 +32,8 @@ services:
       - DB_PASSWORD=root
       - DB_NAME=kopi_popi
       - JWT_SECRET=supersecret
+    volumes:
+      - ./backend/uploads:/app/uploads
     depends_on:
       - mysql_db
 

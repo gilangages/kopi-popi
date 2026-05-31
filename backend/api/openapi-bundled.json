@@ -541,6 +541,378 @@
         }
       }
     },
+    "/categories": {
+      "get": {
+        "summary": "Get All Categories",
+        "tags": [
+          "Catalogues"
+        ],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Category"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Category (Admin Only)",
+        "tags": [
+          "Catalogues"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GenericSuccess"
+          }
+        }
+      }
+    },
+    "/categories/{id}": {
+      "put": {
+        "summary": "Update Category (Admin Only)",
+        "tags": [
+          "Catalogues"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GenericSuccess"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Category (Admin Only)",
+        "tags": [
+          "Catalogues"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GenericSuccess"
+          }
+        }
+      }
+    },
+    "/materials": {
+      "get": {
+        "summary": "Get All Materials (Admin/Manager Only)",
+        "tags": [
+          "Catalogues"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Material"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Material (Admin Only)",
+        "tags": [
+          "Catalogues"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MaterialRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GenericSuccess"
+          }
+        }
+      }
+    },
+    "/materials/{id}": {
+      "put": {
+        "summary": "Update Material (Admin Only)",
+        "tags": [
+          "Catalogues"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MaterialRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GenericSuccess"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Material (Admin Only)",
+        "tags": [
+          "Catalogues"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GenericSuccess"
+          }
+        }
+      }
+    },
+    "/products": {
+      "get": {
+        "summary": "Get All Products",
+        "description": "Public users see only basic info. Does NOT include BOM/Recipe.",
+        "tags": [
+          "Catalogues"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "name": "category_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Product"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Product with Recipe (Admin Only)",
+        "tags": [
+          "Catalogues"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GenericSuccess"
+          }
+        }
+      }
+    },
+    "/products/{id}": {
+      "get": {
+        "summary": "Get Product Detail",
+        "description": "Includes Recipe (BOM) only if requester is Admin or Manager and adds ?include_recipe=true.",
+        "tags": [
+          "Catalogues"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "include_recipe",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Product"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update Product and Recipe (Admin Only)",
+        "tags": [
+          "Catalogues"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GenericSuccess"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Soft Delete Product (Admin Only)",
+        "tags": [
+          "Catalogues"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GenericSuccess"
+          }
+        }
+      }
+    },
     "/branches": {
       "get": {
         "summary": "Get All Branches",
@@ -640,320 +1012,6 @@
         "description": "Sets is_active to false instead of physical deletion.",
         "tags": [
           "Branches"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GenericSuccess"
-          }
-        }
-      }
-    },
-    "/categories": {
-      "get": {
-        "summary": "Get Categories",
-        "tags": [
-          "Categories"
-        ],
-        "security": [],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GenericSuccess"
-          }
-        }
-      }
-    },
-    "/products": {
-      "get": {
-        "summary": "Get All Products",
-        "tags": [
-          "Products"
-        ],
-        "security": [],
-        "parameters": [
-          {
-            "name": "search",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            },
-            "example": "kopi"
-          },
-          {
-            "name": "category_id",
-            "in": "query",
-            "schema": {
-              "type": "integer"
-            },
-            "example": 1
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "schema": {
-              "type": "integer"
-            },
-            "example": 1
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "schema": {
-              "type": "integer"
-            },
-            "example": 10
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Product"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "summary": "Create Product (Admin/Manager)",
-        "tags": [
-          "Products"
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "category_id": {
-                    "type": "integer",
-                    "example": 1
-                  },
-                  "name": {
-                    "type": "string",
-                    "example": "Kopi Latte"
-                  },
-                  "description": {
-                    "type": "string",
-                    "example": "Enak"
-                  },
-                  "price": {
-                    "type": "number",
-                    "example": 25000
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GenericSuccess"
-          }
-        }
-      }
-    },
-    "/products/{id}": {
-      "get": {
-        "summary": "Get Product Detail",
-        "tags": [
-          "Products"
-        ],
-        "security": [],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GenericSuccess"
-          }
-        }
-      },
-      "patch": {
-        "summary": "Update Product",
-        "tags": [
-          "Products"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GenericSuccess"
-          }
-        }
-      },
-      "delete": {
-        "summary": "Delete Product",
-        "tags": [
-          "Products"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GenericSuccess"
-          }
-        }
-      }
-    },
-    "/products/{id}/boms": {
-      "get": {
-        "summary": "Get Product BOMs",
-        "tags": [
-          "Product BOMs"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GenericSuccess"
-          }
-        }
-      },
-      "post": {
-        "summary": "Create Product BOM",
-        "tags": [
-          "Product BOMs"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "material_id": {
-                    "type": "integer",
-                    "example": 1
-                  },
-                  "quantity_needed": {
-                    "type": "number",
-                    "example": 20
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GenericSuccess"
-          }
-        }
-      }
-    },
-    "/materials": {
-      "get": {
-        "summary": "Get Materials",
-        "tags": [
-          "Materials"
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GenericSuccess"
-          }
-        }
-      },
-      "post": {
-        "summary": "Create Material",
-        "tags": [
-          "Materials"
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GenericSuccess"
-          }
-        }
-      }
-    },
-    "/materials/{id}": {
-      "patch": {
-        "summary": "Update Material",
-        "tags": [
-          "Materials"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GenericSuccess"
-          }
-        }
-      },
-      "delete": {
-        "summary": "Delete Material",
-        "tags": [
-          "Materials"
         ],
         "parameters": [
           {
@@ -1498,6 +1556,74 @@
         }
       }
     },
+    "/uploads": {
+      "post": {
+        "summary": "Upload a File",
+        "description": "Upload a file to the server. Supports JPG, JPEG, PNG, and WEBP. Maximum size is 5MB.",
+        "tags": [
+          "Media"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "The file to upload (Max 5MB)"
+                  },
+                  "folder": {
+                    "type": "string",
+                    "description": "Optional subfolder name (e.g. 'products', 'profiles')",
+                    "default": "misc"
+                  }
+                },
+                "required": [
+                  "file"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "file uploaded successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string",
+                          "example": "http://localhost:8080/uploads/products/1689328293.jpg"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/GenericError"
+          }
+        }
+      }
+    },
     "/notifications": {
       "get": {
         "summary": "Get Notifications",
@@ -1583,6 +1709,176 @@
           }
         }
       },
+      "Category": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "example": "Kopi"
+          }
+        }
+      },
+      "CategoryRequest": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Kopi"
+          }
+        }
+      },
+      "Material": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "category_id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "example": "Biji Kopi Arabica"
+          },
+          "unit": {
+            "type": "string",
+            "example": "gram"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "MaterialRequest": {
+        "type": "object",
+        "required": [
+          "category_id",
+          "name",
+          "unit"
+        ],
+        "properties": {
+          "category_id": {
+            "type": "integer",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Biji Kopi Arabica"
+          },
+          "unit": {
+            "type": "string",
+            "example": "gram"
+          }
+        }
+      },
+      "ProductBOM": {
+        "type": "object",
+        "properties": {
+          "material_id": {
+            "type": "integer",
+            "example": 1
+          },
+          "quantity_needed": {
+            "type": "number",
+            "format": "float",
+            "example": 15.5
+          }
+        }
+      },
+      "Product": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "category_id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "example": "Kopi Susu Aren"
+          },
+          "description": {
+            "type": "string",
+            "example": "Perpaduan espresso dan aren manis"
+          },
+          "price": {
+            "type": "number",
+            "format": "float",
+            "example": 20000
+          },
+          "image_url": {
+            "type": "string"
+          },
+          "is_active": {
+            "type": "boolean"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "recipe": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductBOM"
+            }
+          }
+        }
+      },
+      "ProductRequest": {
+        "type": "object",
+        "required": [
+          "category_id",
+          "name",
+          "price",
+          "recipe"
+        ],
+        "properties": {
+          "category_id": {
+            "type": "integer",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Kopi Susu Aren"
+          },
+          "description": {
+            "type": "string",
+            "example": "Perpaduan espresso dan aren manis"
+          },
+          "price": {
+            "type": "number",
+            "format": "float",
+            "example": 20000
+          },
+          "image_url": {
+            "type": "string",
+            "example": "https://example.com/kopi.jpg"
+          },
+          "is_active": {
+            "type": "boolean",
+            "example": true
+          },
+          "recipe": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductBOM"
+            },
+            "description": "BOM/Resep bahan baku yang dibutuhkan"
+          }
+        }
+      },
       "Branch": {
         "type": "object",
         "properties": {
@@ -1639,29 +1935,6 @@
           "is_active": {
             "type": "boolean",
             "example": true
-          }
-        }
-      },
-      "Product": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string"
-          },
-          "price": {
-            "type": "number"
-          },
-          "image_url": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "category_id": {
-            "type": "integer"
           }
         }
       }

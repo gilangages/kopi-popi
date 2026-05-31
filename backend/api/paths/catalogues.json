@@ -1,0 +1,240 @@
+{
+  "categories": {
+    "get": {
+      "summary": "Get All Categories",
+      "tags": ["Catalogues"],
+      "security": [],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "type": "array",
+                    "items": { "$ref": "../schemas/catalogues.json#/Category" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "post": {
+      "summary": "Create Category (Admin Only)",
+      "tags": ["Catalogues"],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "../schemas/catalogues.json#/CategoryRequest" }
+          }
+        }
+      },
+      "responses": {
+        "200": { "$ref": "../responses/common.json#/GenericSuccess" }
+      }
+    }
+  },
+  "category-detail": {
+    "put": {
+      "summary": "Update Category (Admin Only)",
+      "tags": ["Catalogues"],
+      "parameters": [
+        { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "../schemas/catalogues.json#/CategoryRequest" }
+          }
+        }
+      },
+      "responses": {
+        "200": { "$ref": "../responses/common.json#/GenericSuccess" }
+      }
+    },
+    "delete": {
+      "summary": "Delete Category (Admin Only)",
+      "tags": ["Catalogues"],
+      "parameters": [
+        { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+      ],
+      "responses": {
+        "200": { "$ref": "../responses/common.json#/GenericSuccess" }
+      }
+    }
+  },
+  "materials": {
+    "get": {
+      "summary": "Get All Materials (Admin/Manager Only)",
+      "tags": ["Catalogues"],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "type": "array",
+                    "items": { "$ref": "../schemas/catalogues.json#/Material" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "post": {
+      "summary": "Create Material (Admin Only)",
+      "tags": ["Catalogues"],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "../schemas/catalogues.json#/MaterialRequest" }
+          }
+        }
+      },
+      "responses": {
+        "200": { "$ref": "../responses/common.json#/GenericSuccess" }
+      }
+    }
+  },
+  "material-detail": {
+    "put": {
+      "summary": "Update Material (Admin Only)",
+      "tags": ["Catalogues"],
+      "parameters": [
+        { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "../schemas/catalogues.json#/MaterialRequest" }
+          }
+        }
+      },
+      "responses": {
+        "200": { "$ref": "../responses/common.json#/GenericSuccess" }
+      }
+    },
+    "delete": {
+      "summary": "Delete Material (Admin Only)",
+      "tags": ["Catalogues"],
+      "parameters": [
+        { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+      ],
+      "responses": {
+        "200": { "$ref": "../responses/common.json#/GenericSuccess" }
+      }
+    }
+  },
+  "products": {
+    "get": {
+      "summary": "Get All Products",
+      "description": "Public users see only basic info. Does NOT include BOM/Recipe.",
+      "tags": ["Catalogues"],
+      "security": [],
+      "parameters": [
+        { "name": "category_id", "in": "query", "required": false, "schema": { "type": "integer" } },
+        { "name": "search", "in": "query", "required": false, "schema": { "type": "string" } }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "type": "array",
+                    "items": { "$ref": "../schemas/catalogues.json#/Product" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "post": {
+      "summary": "Create Product with Recipe (Admin Only)",
+      "tags": ["Catalogues"],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "../schemas/catalogues.json#/ProductRequest" }
+          }
+        }
+      },
+      "responses": {
+        "200": { "$ref": "../responses/common.json#/GenericSuccess" }
+      }
+    }
+  },
+  "product-detail": {
+    "get": {
+      "summary": "Get Product Detail",
+      "description": "Includes Recipe (BOM) only if requester is Admin or Manager and adds ?include_recipe=true.",
+      "tags": ["Catalogues"],
+      "parameters": [
+        { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } },
+        { "name": "include_recipe", "in": "query", "required": false, "schema": { "type": "boolean" } }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": { "$ref": "../schemas/catalogues.json#/Product" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "put": {
+      "summary": "Update Product and Recipe (Admin Only)",
+      "tags": ["Catalogues"],
+      "parameters": [
+        { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "../schemas/catalogues.json#/ProductRequest" }
+          }
+        }
+      },
+      "responses": {
+        "200": { "$ref": "../responses/common.json#/GenericSuccess" }
+      }
+    },
+    "delete": {
+      "summary": "Soft Delete Product (Admin Only)",
+      "tags": ["Catalogues"],
+      "parameters": [
+        { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+      ],
+      "responses": {
+        "200": { "$ref": "../responses/common.json#/GenericSuccess" }
+      }
+    }
+  }
+}
